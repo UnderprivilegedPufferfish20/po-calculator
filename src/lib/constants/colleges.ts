@@ -1,0 +1,63 @@
+import { College } from "../types/college";
+
+export const colleges: College[] = [
+  // Big 10
+  { name: "University of Michigan", conference: "Big 10", imgUrl: "/colleges/michigan.png" },
+  { name: "Ohio State University", conference: "Big 10", imgUrl: "/colleges/ohio-state.png" },
+  { name: "Penn State University", conference: "Big 10", imgUrl: "/colleges/penn-state.png" },
+  { name: "University of Wisconsin", conference: "Big 10", imgUrl: "/colleges/wisconsin.png" },
+  { name: "Michigan State University", conference: "Big 10", imgUrl: "/colleges/michigan-state.png" },
+  { name: "Northwestern University", conference: "Big 10", imgUrl: "/colleges/northwestern.png" },
+  { name: "University of Iowa", conference: "Big 10", imgUrl: "/colleges/iowa.png" },
+  { name: "Indiana University", conference: "Big 10", imgUrl: "/colleges/indiana.png" },
+  { name: "University of Minnesota", conference: "Big 10", imgUrl: "/colleges/minnesota.png" },
+  { name: "Purdue University", conference: "Big 10", imgUrl: "/colleges/purdue.png" },
+  { name: "University of Illinois", conference: "Big 10", imgUrl: "/colleges/illinois.png" },
+  { name: "University of Nebraska", conference: "Big 10", imgUrl: "/colleges/nebraska.png" },
+  { name: "Rutgers University", conference: "Big 10", imgUrl: "/colleges/rutgers.png" },
+  { name: "University of Maryland", conference: "Big 10", imgUrl: "/colleges/maryland.png" },
+  
+  // ACC
+  { name: "Duke University", conference: "ACC", imgUrl: "/colleges/duke.png" },
+  { name: "University of North Carolina", conference: "ACC", imgUrl: "/colleges/unc.png" },
+  { name: "Clemson University", conference: "ACC", imgUrl: "/colleges/clemson.png" },
+  { name: "Florida State University", conference: "ACC", imgUrl: "/colleges/fsu.png" },
+  { name: "University of Miami", conference: "ACC", imgUrl: "/colleges/miami.png" },
+  { name: "Virginia Tech", conference: "ACC", imgUrl: "/colleges/virginia-tech.png" },
+  { name: "University of Virginia", conference: "ACC", imgUrl: "/colleges/virginia.png" },
+  { name: "Georgia Tech", conference: "ACC", imgUrl: "/colleges/georgia-tech.png" },
+  { name: "Wake Forest University", conference: "ACC", imgUrl: "/colleges/wake-forest.png" },
+  { name: "Boston College", conference: "ACC", imgUrl: "/colleges/boston-college.png" },
+  { name: "NC State University", conference: "ACC", imgUrl: "/colleges/nc-state.png" },
+  { name: "University of Pittsburgh", conference: "ACC", imgUrl: "/colleges/pitt.png" },
+  { name: "Syracuse University", conference: "ACC", imgUrl: "/colleges/syracuse.png" },
+  { name: "University of Louisville", conference: "ACC", imgUrl: "/colleges/louisville.png" },
+  
+  // Big 12
+  { name: "University of Texas", conference: "Big 12", imgUrl: "/colleges/texas.png" },
+  { name: "University of Oklahoma", conference: "Big 12", imgUrl: "/colleges/oklahoma.png" },
+  { name: "Baylor University", conference: "Big 12", imgUrl: "/colleges/baylor.png" },
+  { name: "Texas Tech University", conference: "Big 12", imgUrl: "/colleges/texas-tech.png" },
+  { name: "Oklahoma State University", conference: "Big 12", imgUrl: "/colleges/oklahoma-state.png" },
+  { name: "Kansas State University", conference: "Big 12", imgUrl: "/colleges/kansas-state.png" },
+  { name: "University of Kansas", conference: "Big 12", imgUrl: "/colleges/kansas.png" },
+  { name: "Iowa State University", conference: "Big 12", imgUrl: "/colleges/iowa-state.png" },
+  { name: "TCU", conference: "Big 12", imgUrl: "/colleges/tcu.png" },
+  { name: "West Virginia University", conference: "Big 12", imgUrl: "/colleges/west-virginia.png" },
+  
+  // SEC
+  { name: "University of Alabama", conference: "SEC", imgUrl: "/colleges/alabama.png" },
+  { name: "University of Georgia", conference: "SEC", imgUrl: "/colleges/georgia.png" },
+  { name: "Louisiana State University", conference: "SEC", imgUrl: "/colleges/lsu.png" },
+  { name: "University of Florida", conference: "SEC", imgUrl: "/colleges/florida.png" },
+  { name: "Auburn University", conference: "SEC", imgUrl: "/colleges/auburn.png" },
+  { name: "University of Tennessee", conference: "SEC", imgUrl: "/colleges/tennessee.png" },
+  { name: "University of Kentucky", conference: "SEC", imgUrl: "/colleges/kentucky.png" },
+  { name: "University of South Carolina", conference: "SEC", imgUrl: "/colleges/south-carolina.png" },
+  { name: "Vanderbilt University", conference: "SEC", imgUrl: "/colleges/vanderbilt.png" },
+  { name: "University of Missouri", conference: "SEC", imgUrl: "/colleges/missouri.png" },
+  { name: "University of Arkansas", conference: "SEC", imgUrl: "/colleges/arkansas.png" },
+  { name: "Mississippi State University", conference: "SEC", imgUrl: "/colleges/mississippi-state.png" },
+  { name: "University of Mississippi", conference: "SEC", imgUrl: "/colleges/ole-miss.png" },
+  { name: "Texas A&M University", conference: "SEC", imgUrl: "/colleges/texas-am.png" },
+] as const;

@@ -1,107 +1,25 @@
 'use client'
 
-import React, { JSX, useState } from 'react'
-import { AtheleteTypeCard } from '@/components/AtheleteTypeCard'
+import React, { JSX, useEffect, useState } from 'react'
+import AthleteTypeCard from '@/components/AtheleteTypeCard'
 import { SportCard } from '@/components/SportCard'
-import { AthleteType, SelectedPlatform, SelectedSportType, SocialMediaPlatform } from '@/lib/types'
-import { socialMediaPlatforms, sports } from '@/lib/constants'
 import { Slider } from '@/components/ui/slider'
 import { Button } from '@/components/ui/button'
 import { Check, ChevronsUpDown, X } from 'lucide-react'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { College, CollegeCardProps, ConferenceType } from '@/lib/types/college'
+import { AtheleteType, SavedUserData, SelectedSportType } from '@/lib/types'
+import { SelectedPlatform, SocialMediaData, SocialMediaPlatform } from '@/lib/types/social_media'
+import { sports } from '@/lib/constants/sports'
+import { colleges } from '@/lib/constants/colleges'
+import { socialMediaPlatforms } from '@/lib/constants/social_media'
 
 // Types for college selection
-interface College {
-  name: string;
-  conference: ConferenceType;
-  imgUrl: string;
-}
 
-type ConferenceType = 'Big 10' | 'ACC' | 'Big 12' | 'SEC';
-
-interface SocialMediaData {
-  platforms: SelectedPlatform[];
-  totalReach: number;
-}
-
-interface SavedUserData {
-  athleteType: AthleteType | null;
-  sportPlayed: SelectedSportType | null;
-  socialMediaData: SocialMediaData | null;
-  selectedColleges: string[];
-}
-
-interface CollegeCardProps {
-  name: string;
-  conference: ConferenceType;
-  imgUrl: string;
-  onSelect: (name: string) => void;
-  isSelected: boolean;
-}
 
 // College data with conferences
-const colleges: College[] = [
-  // Big 10
-  { name: "University of Michigan", conference: "Big 10", imgUrl: "/colleges/michigan.png" },
-  { name: "Ohio State University", conference: "Big 10", imgUrl: "/colleges/ohio-state.png" },
-  { name: "Penn State University", conference: "Big 10", imgUrl: "/colleges/penn-state.png" },
-  { name: "University of Wisconsin", conference: "Big 10", imgUrl: "/colleges/wisconsin.png" },
-  { name: "Michigan State University", conference: "Big 10", imgUrl: "/colleges/michigan-state.png" },
-  { name: "Northwestern University", conference: "Big 10", imgUrl: "/colleges/northwestern.png" },
-  { name: "University of Iowa", conference: "Big 10", imgUrl: "/colleges/iowa.png" },
-  { name: "Indiana University", conference: "Big 10", imgUrl: "/colleges/indiana.png" },
-  { name: "University of Minnesota", conference: "Big 10", imgUrl: "/colleges/minnesota.png" },
-  { name: "Purdue University", conference: "Big 10", imgUrl: "/colleges/purdue.png" },
-  { name: "University of Illinois", conference: "Big 10", imgUrl: "/colleges/illinois.png" },
-  { name: "University of Nebraska", conference: "Big 10", imgUrl: "/colleges/nebraska.png" },
-  { name: "Rutgers University", conference: "Big 10", imgUrl: "/colleges/rutgers.png" },
-  { name: "University of Maryland", conference: "Big 10", imgUrl: "/colleges/maryland.png" },
-  
-  // ACC
-  { name: "Duke University", conference: "ACC", imgUrl: "/colleges/duke.png" },
-  { name: "University of North Carolina", conference: "ACC", imgUrl: "/colleges/unc.png" },
-  { name: "Clemson University", conference: "ACC", imgUrl: "/colleges/clemson.png" },
-  { name: "Florida State University", conference: "ACC", imgUrl: "/colleges/fsu.png" },
-  { name: "University of Miami", conference: "ACC", imgUrl: "/colleges/miami.png" },
-  { name: "Virginia Tech", conference: "ACC", imgUrl: "/colleges/virginia-tech.png" },
-  { name: "University of Virginia", conference: "ACC", imgUrl: "/colleges/virginia.png" },
-  { name: "Georgia Tech", conference: "ACC", imgUrl: "/colleges/georgia-tech.png" },
-  { name: "Wake Forest University", conference: "ACC", imgUrl: "/colleges/wake-forest.png" },
-  { name: "Boston College", conference: "ACC", imgUrl: "/colleges/boston-college.png" },
-  { name: "NC State University", conference: "ACC", imgUrl: "/colleges/nc-state.png" },
-  { name: "University of Pittsburgh", conference: "ACC", imgUrl: "/colleges/pitt.png" },
-  { name: "Syracuse University", conference: "ACC", imgUrl: "/colleges/syracuse.png" },
-  { name: "University of Louisville", conference: "ACC", imgUrl: "/colleges/louisville.png" },
-  
-  // Big 12
-  { name: "University of Texas", conference: "Big 12", imgUrl: "/colleges/texas.png" },
-  { name: "University of Oklahoma", conference: "Big 12", imgUrl: "/colleges/oklahoma.png" },
-  { name: "Baylor University", conference: "Big 12", imgUrl: "/colleges/baylor.png" },
-  { name: "Texas Tech University", conference: "Big 12", imgUrl: "/colleges/texas-tech.png" },
-  { name: "Oklahoma State University", conference: "Big 12", imgUrl: "/colleges/oklahoma-state.png" },
-  { name: "Kansas State University", conference: "Big 12", imgUrl: "/colleges/kansas-state.png" },
-  { name: "University of Kansas", conference: "Big 12", imgUrl: "/colleges/kansas.png" },
-  { name: "Iowa State University", conference: "Big 12", imgUrl: "/colleges/iowa-state.png" },
-  { name: "TCU", conference: "Big 12", imgUrl: "/colleges/tcu.png" },
-  { name: "West Virginia University", conference: "Big 12", imgUrl: "/colleges/west-virginia.png" },
-  
-  // SEC
-  { name: "University of Alabama", conference: "SEC", imgUrl: "/colleges/alabama.png" },
-  { name: "University of Georgia", conference: "SEC", imgUrl: "/colleges/georgia.png" },
-  { name: "Louisiana State University", conference: "SEC", imgUrl: "/colleges/lsu.png" },
-  { name: "University of Florida", conference: "SEC", imgUrl: "/colleges/florida.png" },
-  { name: "Auburn University", conference: "SEC", imgUrl: "/colleges/auburn.png" },
-  { name: "University of Tennessee", conference: "SEC", imgUrl: "/colleges/tennessee.png" },
-  { name: "University of Kentucky", conference: "SEC", imgUrl: "/colleges/kentucky.png" },
-  { name: "University of South Carolina", conference: "SEC", imgUrl: "/colleges/south-carolina.png" },
-  { name: "Vanderbilt University", conference: "SEC", imgUrl: "/colleges/vanderbilt.png" },
-  { name: "University of Missouri", conference: "SEC", imgUrl: "/colleges/missouri.png" },
-  { name: "University of Arkansas", conference: "SEC", imgUrl: "/colleges/arkansas.png" },
-  { name: "Mississippi State University", conference: "SEC", imgUrl: "/colleges/mississippi-state.png" },
-  { name: "University of Mississippi", conference: "SEC", imgUrl: "/colleges/ole-miss.png" },
-  { name: "Texas A&M University", conference: "SEC", imgUrl: "/colleges/texas-am.png" },
-] as const;
+
 
 const CollegeCard: React.FC<CollegeCardProps> = ({ name, conference, imgUrl, onSelect, isSelected }) => {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>): void => {
@@ -138,7 +56,7 @@ const CollegeCard: React.FC<CollegeCardProps> = ({ name, conference, imgUrl, onS
 };
 
 export default function Home(): JSX.Element {
-  const [athleteType, setAthleteType] = useState<AthleteType>(null);
+  const [athleteType, setAthleteType] = useState<AtheleteType | null>(null);
   const [sportPlayed, setSportPlayed] = useState<SelectedSportType | null>(null);
   const [selectedPlatforms, setSelectedPlatforms] = useState<SelectedPlatform[]>([]);
   const [selectedColleges, setSelectedColleges] = useState<string[]>([]);
@@ -147,6 +65,12 @@ export default function Home(): JSX.Element {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedConference, setSelectedConference] = useState<ConferenceType | 'All'>('All');
   const [collegeSearchTerm, setCollegeSearchTerm] = useState<string>('');
+
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   // State to track completion of social media step
   const [socialMediaCompleted, setSocialMediaCompleted] = useState<boolean>(false);
@@ -171,7 +95,7 @@ export default function Home(): JSX.Element {
     return matchesConference && matchesSearch;
   });
 
-  const maxColleges: number = athleteType === 'Youth Athelete' ? 5 : 2;
+  const maxColleges: number = athleteType === AtheleteType.YOUTH ? 5 : 2;
 
   const handleCollegeSelect = (collegeName: string): void => {
     setSelectedColleges(prev => {
@@ -215,33 +139,119 @@ export default function Home(): JSX.Element {
 
   // First screen: Choose athlete type
   if (!athleteType && !sportPlayed && selectedPlatforms.length === 0) {
-    return (
-      <div className="w-screen h-screen bg-black flex flex-col justify-center items-center">
-        <div className="text-white font-semibold text-4xl">
-          <h1 className="text-center">What Kind of Athlete are you?</h1>
-          <div className="flex gap-4 mt-12 flex-wrap justify-center">
-            <AtheleteTypeCard
-              label="Youth Athelete"
-              desc="For high school athletes looking for opportunities at the school they're interested in"
-              imgUrl="/youth_athelete.jpeg"
-              onClick={setAthleteType}
-            />
-            <AtheleteTypeCard
-              label="College Athelete"
-              desc="For college athletes looking to monetize their name, image, and likeness."
-              imgUrl="/college_athelete.png"
-              onClick={setAthleteType}
-            />
-            <AtheleteTypeCard
-              label="Pro Athelete"
-              desc="For pro athletes who want to monetize their name, image, and likeness."
-              imgUrl="/pro_athelete.png"
-              onClick={setAthleteType}
-            />
-          </div>
+     return (
+    <div className="relative w-screen h-screen overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-blue-900">
+        {/* Floating geometric shapes */}
+        <div className="absolute inset-0">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute opacity-10"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`
+              }}
+            >
+              {i % 3 === 0 ? (
+                <div className="w-16 h-16 border-2 border-blue-400 rotate-45 animate-spin" style={{ animationDuration: '8s' }} />
+              ) : i % 3 === 1 ? (
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-pulse" />
+              ) : (
+                <div className="w-8 h-20 bg-gradient-to-b from-blue-400 to-transparent transform rotate-12" />
+              )}
+            </div>
+          ))}
+        </div>
+        
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `
+            linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }} />
+        
+        {/* Radial gradient spotlight */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-40" />
+      </div>
+      
+      {/* Main Content */}
+      <div className="relative z-10 w-full h-full flex flex-col justify-center items-center px-4">
+        {/* Title with enhanced animation */}
+        <div className={`text-white font-bold text-4xl md:text-5xl mb-16 transition-all duration-1000 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+          <h1 className="text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-200 animate-pulse">
+            What Kind of Athlete are you?
+          </h1>
+          <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full animate-glow" />
+        </div>
+        
+        {/* Cards container */}
+        <div className={`flex gap-8 flex-wrap justify-center max-w-6xl transition-all duration-1000 delay-300 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+          <AthleteTypeCard
+            label={AtheleteType.YOUTH}
+            desc="For high school athletes looking for opportunities at the school they're interested in"
+            imgUrl="/youth_athlete.jpeg"
+            onClick={setAthleteType}
+          />
+          <AthleteTypeCard
+            label={AtheleteType.COLLEGE}
+            desc="For college athletes looking to monetize their name, image, and likeness."
+            imgUrl="/college_athlete.png"
+            onClick={setAthleteType}
+          />
+          <AthleteTypeCard
+            label={AtheleteType.PRO}
+            desc="For pro athletes who want to monetize their name, image, and likeness."
+            imgUrl="/pro_athlete.png"
+            onClick={setAthleteType}
+          />
         </div>
       </div>
-    );
+      
+      {/* Custom CSS animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          25% { transform: translateY(-10px) rotate(1deg); }
+          50% { transform: translateY(-20px) rotate(0deg); }
+          75% { transform: translateY(-10px) rotate(-1deg); }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+          50% { box-shadow: 0 0 40px rgba(147, 51, 234, 0.8), 0 0 60px rgba(59, 130, 246, 0.5); }
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+        
+        .bg-gradient-radial {
+          background: radial-gradient(circle at center, var(--tw-gradient-stops));
+        }
+      `}</style>
+    </div>
+  );
   }
 
   // Second screen: Sport selection
