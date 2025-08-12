@@ -61,3 +61,5 @@ export const colleges: College[] = [
   { name: "University of Mississippi", conference: "SEC", imgUrl: "/colleges/ole-miss.png" },
   { name: "Texas A&M University", conference: "SEC", imgUrl: "/colleges/texas-am.png" },
 ] as const;
+
+export const conferences = ['SEC', "Big 12", 'ACC', "Big 10"]

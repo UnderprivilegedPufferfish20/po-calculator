@@ -1,22 +1,25 @@
 'use client'
-import { AtheleteType } from "@/lib/types";
-import Image from "next/image";
-import { SetStateAction, useEffect, useState } from "react";
+
+import { AtheleteType, Stage } from "@/lib/types";
+import { useState } from "react";
+import { useCalculatorProvider } from "../providers/CalculatorProvider";
 
 interface Props {
-  imgUrl: string,
   desc: string,
   label: AtheleteType,
-  onClick: React.Dispatch<SetStateAction<AtheleteType | null>>
 }
 
 
 const AthleteTypeCard = (props: Props) => {
+  const {setStage, setAthleteType} = useCalculatorProvider()
   const [isHovered, setIsHovered] = useState(false);
   
   return (
     <div
-      onClick={() => props.onClick(props.label)}
+      onClick={() => {
+        setAthleteType(props.label);
+        setStage(Stage.SPORT_SELECT)
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative border-2 border-transparent w-full max-w-sm aspect-square bg-gradient-to-br from-gray-900 via-black to-gray-800 rounded-xl overflow-hidden cursor-pointer transform transition-all duration-700 ease-out hover:scale-105 hover:rotate-1 group animate-fadeInUp"

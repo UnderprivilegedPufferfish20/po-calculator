@@ -28,6 +28,15 @@ export interface SavedUserData {
 }
 
 
+export enum Stage {
+  ATHLETE_SELECT = 'AS',
+  SPORT_SELECT = 'SS',
+  SOCIAL_MEDIA_SELECT = "SMS",
+  COLLEGE_SELECT = "CS",
+  END = "E"
+}
+
+
 
 
 
