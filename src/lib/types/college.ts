@@ -1,7 +1,6 @@
 export interface College {
   name: string;
-  conference: ConferenceType;
-  imgUrl: string;
+  conference: ConferenceType
 }
 
 export type ConferenceType = 'Big 10' | 'ACC' | 'Big 12' | 'SEC';
@@ -18,7 +17,6 @@ export interface CollegeCardProps {
 export interface College {
   name: string;
   conference: ConferenceType;
-  imgUrl: string;
 }
 
 

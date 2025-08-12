@@ -1,15 +1,14 @@
 import { ConferenceType } from "@/lib/types/college";
 import { Check } from "lucide-react";
 import { useCalculatorProvider } from "../providers/CalculatorProvider";
-import { AtheleteType } from "@/lib/types";
+import { getCollegeImg } from "@/lib/utils";
 
 interface Props {
   name: string,
-  conference: ConferenceType,
-  imgUrl: string
+  conference: ConferenceType
 }
 
-const CollegeCard = ({ name, conference, imgUrl }: Props) => {
+const CollegeCard = ({ name, conference }: Props) => {
   const {selectedColleges, handleCollegeSelect, athleteType} = useCalculatorProvider()
 
   return (
@@ -23,7 +22,7 @@ const CollegeCard = ({ name, conference, imgUrl }: Props) => {
     >
       <div className="aspect-square bg-gray-800 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
         <img 
-          src={imgUrl} 
+          src={getCollegeImg(name)} 
           alt={name}
           className="w-full h-full object-cover"
         />

@@ -10,7 +10,7 @@ import { useCalculatorProvider } from '@/components/providers/CalculatorProvider
 
 
 export default function Home() {
-  const {stage} = useCalculatorProvider()
+  const {stage, athleteType, selectedColleges, selectedPlatforms, sportPlayed} = useCalculatorProvider()
 
   const [mounted, setMounted] = useState(false);
   
@@ -42,7 +42,27 @@ export default function Home() {
 
   if (stage === Stage.END) {
     return (
-      <h1>UR DOne</h1>
+      <div className='flex flex-col gap-6'>
+        <div className="flex flex-col gap-8">
+          <h1>Athelete Type:</h1>
+          <pre>{athleteType}</pre>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          <h1>Sport Played:</h1>
+          <pre>{JSON.stringify(sportPlayed)}</pre>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          <h1>Social Media:</h1>
+          <pre>{JSON.stringify(selectedPlatforms)}</pre>
+        </div>
+
+        <div className="flex flex-col gap-8">
+          <h1>Colleges:</h1>
+          <pre>{selectedColleges}</pre>
+        </div>
+      </div>
     )
   }
 }

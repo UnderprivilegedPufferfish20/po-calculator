@@ -68,7 +68,6 @@ const CollegeSelectionPage = () => {
               key={college.name}
               name={college.name}
               conference={college.conference}
-              imgUrl={college.imgUrl}
             />
           ))}
         </div>
@@ -80,7 +79,7 @@ const CollegeSelectionPage = () => {
 
       {/* Selected colleges list */}
       {selectedColleges.length > 0 && (
-        <div className={`${glassCard} mt-8 p-6`}>
+        <div className={`${glassCard} mt-8 p-6 sticky bottom-[-48px]`}>
           <h3 className="text-xl font-semibold mb-4 text-center">Selected Colleges</h3>
           <div className="flex flex-wrap justify-center gap-2 mb-6">
             {selectedColleges.map((name) => (

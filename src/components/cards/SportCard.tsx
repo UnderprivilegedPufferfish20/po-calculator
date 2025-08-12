@@ -11,7 +11,6 @@ import { Stage } from "@/lib/types"
 
 type Props = {
   name: string
-  imgUrl: string
   positions?: string[]
 }
 
@@ -28,8 +27,7 @@ export function SportCard(sport: Props) {
             ? () => {} 
             : () => {
             setSportPlayed({
-              name: sport.name,
-              imgUrl: sport.imgUrl
+              name: sport.name
             });
             setStage(Stage.SOCIAL_MEDIA_SELECT)
           }
@@ -52,7 +50,7 @@ export function SportCard(sport: Props) {
       <div className="absolute inset-0 w-full h-full">
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent via-70% to-black to-90% z-10 opacity-50 group-hover:opacity-40 transition-opacity duration-500"></div>
         <img 
-          src={sport.imgUrl}
+          src={"/sports/" + sport.name.replaceAll(' ', '_').toLowerCase() + '.avif'}
           alt={sport.name}
           className="w-full h-full object-cover opacity-60 transition-all duration-500 ease-in-out group-hover:opacity-70"
         />
@@ -76,8 +74,7 @@ export function SportCard(sport: Props) {
                 onClick={() => {
                   setSportPlayed({
                     name: sport.name,
-                    position: position,
-                    imgUrl: sport.imgUrl
+                    positions: [position]
                   });
                   setStage(Stage.SOCIAL_MEDIA_SELECT)
                 }}

@@ -1,7 +1,7 @@
 'use client'
 
 
-import { AtheleteType, SelectedSportType, Stage } from "@/lib/types";
+import { AtheleteType, SportType, Stage } from "@/lib/types";
 import { SelectedPlatform } from "@/lib/types/social_media";
 import React, { Dispatch, SetStateAction, useState,createContext } from "react";
 
@@ -18,8 +18,8 @@ type CalculatorProviderContextType = {
   selectedPlatforms: SelectedPlatform[]
   setSelectedPlatforms: Dispatch<SetStateAction<SelectedPlatform[]>>
 
-  sportPlayed: SelectedSportType | null
-  setSportPlayed: Dispatch<SetStateAction<SelectedSportType | null>>
+  sportPlayed: SportType | null
+  setSportPlayed: Dispatch<SetStateAction<SportType | null>>
 
   handleCollegeSelect: (collegeName: string) => void;
 
@@ -33,7 +33,7 @@ export function CalculatorContextProvider({
   children: React.ReactNode
 }) {
   const [athleteType, setAthleteType] = useState<AtheleteType | null>(null);
-  const [sportPlayed, setSportPlayed] = useState<SelectedSportType | null>(null);
+  const [sportPlayed, setSportPlayed] = useState<SportType | null>(null);
   const [selectedPlatforms, setSelectedPlatforms] = useState<SelectedPlatform[]>([]);
   const [selectedColleges, setSelectedColleges] = useState<string[]>([]);
   const [stage, setStage] = useState<Stage>(Stage.ATHLETE_SELECT)
