@@ -7,6 +7,8 @@ import AthleteTypePage from '@/components/pages/AthleteType'
 import SportSelectionPage from '@/components/pages/SportSelection'
 import CollegeSelectionPage from '@/components/pages/CollegeSelection'
 import { useCalculatorProvider } from '@/components/providers/CalculatorProvider'
+import { calculatePlayerValue } from '@/lib/utils/postValue'
+import NILValueDemo from '@/components/pages/ValueOutput'
 
 
 export default function Home() {
@@ -41,28 +43,6 @@ export default function Home() {
   }
 
   if (stage === Stage.END) {
-    return (
-      <div className='flex flex-col gap-6'>
-        <div className="flex flex-col gap-8">
-          <h1>Athelete Type:</h1>
-          <pre>{athleteType}</pre>
-        </div>
-
-        <div className="flex flex-col gap-8">
-          <h1>Sport Played:</h1>
-          <pre>{JSON.stringify(sportPlayed)}</pre>
-        </div>
-
-        <div className="flex flex-col gap-8">
-          <h1>Social Media:</h1>
-          <pre>{JSON.stringify(selectedPlatforms)}</pre>
-        </div>
-
-        <div className="flex flex-col gap-8">
-          <h1>Colleges:</h1>
-          <pre>{selectedColleges}</pre>
-        </div>
-      </div>
-    )
+    return <NILValueDemo />
   }
 }

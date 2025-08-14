@@ -1,3 +1,5 @@
+import { CollegeEstimate } from "./college";
+
 export type SportType = {
   name: string,
   positions?: string[]
@@ -18,6 +20,14 @@ export enum Stage {
   END = "E"
 }
 
+
+export type PlayerValueResult = {
+  athleteType: AtheleteType | null;
+  sport: SportType | null;
+  colleges: CollegeEstimate[];
+};
+
+export type MoneyRange = { low: number; high: number };
 
 
 

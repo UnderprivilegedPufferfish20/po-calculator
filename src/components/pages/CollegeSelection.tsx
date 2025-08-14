@@ -9,6 +9,7 @@ import { AtheleteType, Stage } from '@/lib/types';
 import { glassCard } from '@/lib/utils';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
 import CollegeCard from '../cards/CollegeCard'; // <-- import your reusable card
+import { Search } from 'lucide-react';
 
 const CollegeSelectionPage = () => {
   const { setStage, athleteType, selectedColleges, handleCollegeSelect } = useCalculatorProvider();
@@ -30,33 +31,46 @@ const CollegeSelectionPage = () => {
       title="Select Colleges"
       subtitle={`Choose up to ${maxColleges} colleges you're interested in • ${selectedColleges.length} selected`}
       headerSlot={
-        <div className="max-w-4xl mx-auto space-y-4">
-          {/* Conference selection */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {conferences.map((conference) => (
-              <Button
-                key={conference}
-                onClick={() => setSelectedConference(conference as ConferenceType)}
-                variant={selectedConference === conference ? 'default' : 'outline'}
-                className={
-                  selectedConference === conference
-                    ? 'bg-purple-600 text-white'
-                    : `${glassCard} hover:bg-gray-800`
-                }
-              >
-                {conference}
-              </Button>
-            ))}
-          </div>
+        <div className="max-w-4xl mx-auto">
+          {/* Search bar with inline conference filters */}
+          <label className="block">
+            <div
+              className={`${glassCard} flex items-center gap-2 rounded-xl p-2 pl-3 pr-2 focus-within:ring-2 focus-within:ring-purple-500`}
+            >
+              <Search className="h-4 w-4 opacity-70" />
+              <input
+                type="text"
+                placeholder="Search colleges…"
+                className="min-w-0 flex-1 bg-transparent py-2 text-white placeholder:text-white/60 focus:outline-none"
+                value={collegeSearchTerm}
+                onChange={(e) => setCollegeSearchTerm(e.target.value)}
+              />
 
-          {/* Search input */}
-          <input
-            type="text"
-            placeholder="Search colleges..."
-            className={`${glassCard} w-full p-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
-            value={collegeSearchTerm}
-            onChange={(e) => setCollegeSearchTerm(e.target.value)}
-          />
+              {/* Right-aligned, inline filter chips */}
+              <div className="shrink-0 flex items-center gap-2 overflow-x-auto max-w-[55%] pl-2">
+                {conferences.map((conference) => (
+                  <Button
+                    key={conference}
+                    size="sm"
+                    onClick={() => {
+                      selectedConference === conference 
+                        ? setSelectedConference('All')
+                        : setSelectedConference(conference as ConferenceType)
+                    }}
+                    variant={selectedConference === conference ? "default" : "outline"}
+                    className={
+                      "whitespace-nowrap " +
+                      (selectedConference === conference
+                        ? "bg-purple-600 text-white"
+                        : `${glassCard} hover:bg-gray-800`)
+                    }
+                  >
+                    {conference}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </label>
         </div>
       }
     >

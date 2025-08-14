@@ -1,3 +1,4 @@
+import { AtheleteType } from "../types";
 import { College } from "../types/college";
 
 export const colleges: College[] = [
@@ -66,3 +67,9 @@ export const colleges: College[] = [
 ] as const;
 
 export const conferences = ['SEC', "Big 12", 'ACC', "Big 10"]
+
+export const ATHLETE_MULTIPLIER: Record<AtheleteType, number> = {
+  [AtheleteType.YOUTH]: 0.65,
+  [AtheleteType.COLLEGE]: 1.0,
+  [AtheleteType.PRO]: 2.0,
+};

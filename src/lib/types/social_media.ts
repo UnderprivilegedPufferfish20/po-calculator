@@ -1,9 +1,9 @@
+import { MoneyRange } from ".";
+
 export type smFollowers = {platform: string, cnt: number}[]
 
 export interface SocialMediaPlatform {
-  value: string;
-  label: string;
-  icon: string;
+  name: string
 }
 
 export interface SelectedPlatform extends SocialMediaPlatform {
@@ -17,7 +17,12 @@ export interface SocialMediaData {
   totalReach: number;
 }
 
-export interface SocialMediaData {
-  platforms: SelectedPlatform[];
-  totalReach: number;
-}
+export type PostValueByMedium = {
+  image: MoneyRange;
+  video: MoneyRange;
+};
+
+export type PlatformBlock = {
+  name: string;       // platform value (e.g., "instagram")
+  values: PostValueByMedium;
+};

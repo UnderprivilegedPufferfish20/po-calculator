@@ -39,7 +39,6 @@ const SportSelectionPage = () => {
                 <SportCard
                   key={sport.name}
                   name={sport.name}
-                  imgUrl={sport.imgUrl}
                   positions={sport.positions}
                 />
               ))}

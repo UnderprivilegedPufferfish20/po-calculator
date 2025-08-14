@@ -22,10 +22,7 @@ export default function AestheticScreen({
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-black text-white">
-      {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-blue-900">
-
-        {/* Grid overlay */}
         <div
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
@@ -48,7 +45,7 @@ export default function AestheticScreen({
             <div className={`transition-all duration-1000 text-center ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               {title && (
                 <>
-                  <h1 className="font-bold text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-200 animate-pulse">
+                  <h1 className="font-bold text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-200">
                     {title}
                   </h1>
                   <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full animate-glow" />
@@ -61,7 +58,7 @@ export default function AestheticScreen({
         )}
 
         {/* Content area */}
-        <div className={`w-full ${maxWidth} mx-auto flex-1 overflow-auto pb-12`}>
+        <div className={`w-full ${maxWidth} mx-auto flex-1 overflow-scroll no-scrollbar pb-12`}>
           <div className={`transition-all duration-1000 delay-300 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             {children}
           </div>

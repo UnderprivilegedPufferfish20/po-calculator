@@ -94,3 +94,49 @@ export const sports: SportType[] = [
     name: "Wrestling"
   }
 ];
+
+
+
+export const SPORT_MULTIPLIER: Record<string, number> = {
+  football: 1.25,
+  "american football": 1.25,
+  basketball: 1.2,
+  baseball: 1.0,
+  softball: 0.95,
+  soccer: 1.1,
+  volleyball: 1.0,
+  gymnastics: 1.0,
+  wrestling: 0.95,
+  track: 0.9,
+  "track & field": 0.9,
+  tennis: 0.95,
+  golf: 0.9,
+  swimming: 0.9,
+  lacrosse: 0.9,
+  hockey: 1.0,
+};
+
+
+export const POSITION_MULTIPLIER: Record<string, number> = {
+  quarterback: 1.25,
+  qb: 1.25,
+  "wide receiver": 1.15,
+  wr: 1.15,
+  runningback: 1.1,
+  rb: 1.1,
+  center: 0.95,
+  "offensive line": 0.9,
+  "defensive line": 0.95,
+  forward: 1.05,
+  guard: 1.0,
+  "point guard": 1.1,
+  pg: 1.1,
+  "shooting guard": 1.05,
+  sg: 1.05,
+  "small forward": 1.05,
+  sf: 1.05,
+  "power forward": 1.05,
+  pf: 1.05,
+  goalie: 1.05,
+  striker: 1.1,
+};
