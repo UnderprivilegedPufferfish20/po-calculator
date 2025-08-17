@@ -5,7 +5,7 @@ import AestheticScreen from '../Screen';
 import { Button } from '../ui/button';
 import { College, ConferenceType } from '@/lib/types/college';
 import { colleges, conferences } from '@/lib/constants/colleges';
-import { AtheleteType, Stage } from '@/lib/types';
+import { AtheleteType, Stage } from '@/lib/types/athlete';
 import { glassCard } from '@/lib/utils';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
 import CollegeCard from '../cards/CollegeCard'; // <-- import your reusable card

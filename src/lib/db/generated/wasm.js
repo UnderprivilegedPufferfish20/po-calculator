@@ -120,8 +120,59 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id'
+exports.Prisma.AthleteTypeInputScalarFieldEnum = {
+  id: 'id',
+  input_id: 'input_id',
+  athlete_type: 'athlete_type'
+};
+
+exports.Prisma.CollegeInputScalarFieldEnum = {
+  id: 'id',
+  input_id: 'input_id',
+  college: 'college',
+  conference: 'conference'
+};
+
+exports.Prisma.SportInputScalarFieldEnum = {
+  id: 'id',
+  input_id: 'input_id',
+  sport: 'sport',
+  position: 'position'
+};
+
+exports.Prisma.SocialMediaInputScalarFieldEnum = {
+  id: 'id',
+  input_id: 'input_id',
+  platform: 'platform',
+  followers: 'followers'
+};
+
+exports.Prisma.CalculationInputScalarFieldEnum = {
+  id: 'id',
+  output_id: 'output_id',
+  athlete_type_input_id: 'athlete_type_input_id',
+  sport_input_id: 'sport_input_id'
+};
+
+exports.Prisma.CalculationOutputScalarFieldEnum = {
+  id: 'id',
+  college_name: 'college_name',
+  img_low: 'img_low',
+  img_high: 'img_high',
+  vid_low: 'vid_low',
+  vid_high: 'vid_high',
+  ncv_low: 'ncv_low',
+  ncv_high: 'ncv_high'
+};
+
+exports.Prisma.SocialMediaPlatformSpecificScalarFieldEnum = {
+  id: 'id',
+  output_id: 'output_id',
+  name: 'name',
+  img_low: 'img_low',
+  img_high: 'img_high',
+  vid_low: 'vid_low',
+  vid_high: 'vid_high'
 };
 
 exports.Prisma.SortOrder = {
@@ -134,9 +185,20 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  AthleteTypeInput: 'AthleteTypeInput',
+  CollegeInput: 'CollegeInput',
+  SportInput: 'SportInput',
+  SocialMediaInput: 'SocialMediaInput',
+  CalculationInput: 'CalculationInput',
+  CalculationOutput: 'CalculationOutput',
+  SocialMediaPlatformSpecific: 'SocialMediaPlatformSpecific'
 };
 
 /**

@@ -9,7 +9,7 @@ import { Slider } from '../ui/slider';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
-import { Stage } from '@/lib/types';
+import { Stage } from '@/lib/types/athlete';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
 import { titleCase } from '@/lib/utils';
 import Image from 'next/image'
@@ -196,29 +196,15 @@ const SocialMediaPage = () => {
                     <Slider
                       value={[platform.followers]}
                       onValueChange={(value: number[]) => updateFollowers(platform.name, value)}
-                      max={100}
-                      step={1}
+                      max={10}
+                      step={0.005}
                       className="w-full"
                     />
 
                     <div className="mt-2 flex justify-between text-[10px] text-gray-500">
                       <span>0</span>
-                      <span>10M+</span>
+                      <span>1M+</span>
                     </div>
-                  </div>
-
-                  {/* Quick presets */}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {[5, 15, 35, 55, 75, 95].map((tick) => (
-                      <button
-                        key={tick}
-                        onClick={() => updateFollowers(platform.name, [tick])}
-                        className="px-2 py-1 rounded-md text-xs border border-gray-700 hover:bg-gray-800 transition"
-                        aria-label={`Set ${platform.name} followers to ${tick}%`}
-                      >
-                        {formatFollowers(getFollowerCount(tick))}
-                      </button>
-                    ))}
                   </div>
                 </div>
               </div>

@@ -1,166 +1,132 @@
-import { ATHLETE_MULTIPLIER } from "../constants/colleges";
-import { PLATFORM_WEIGHTS } from "../constants/social_media";
-import { POSITION_MULTIPLIER, SPORT_MULTIPLIER } from "../constants/sports";
-import { AtheleteType, SportType, MoneyRange, PlayerValueResult } from "../types";
-import { CollegeEstimate } from "../types/college";
-import { SelectedPlatform, PostValueByMedium, PlatformBlock } from "../types/social_media";
+import { AtheleteType } from "../types/athlete";
+import { CalculatorInput, CalculatorOutput, MediumEstimation, ValueEstimation } from "../types/nil";
+import logCalculation from "../actions/calculations";
 
-function engagementRate(followers: number): number {
-  if (followers <= 0) return 0.0;
-  if (followers < 10_000) return 0.05;      // 5%
-  if (followers < 100_000) return 0.035;    // 3.5%
-  if (followers < 1_000_000) return 0.02;   // 2.0%
-  return 0.012;                              // 1.2%
-}
+// Hardcoded multipliers based on research data
+// College multipliers derived from NIL collective spending (spending in $M / 10)
+const collegeMultipliers: Record<string, number> = {
+  'Ohio State': 2.05,
+  'Texas': 1.84,
+  'Georgia': 1.81,
+  'Texas A&M': 1.73,
+  'LSU': 1.66,
+  'Michigan': 1.62,
+  'Alabama': 1.59,
+  'Florida': 1.58,
+  'Clemson': 1.52,
+  'Oklahoma': 1.48,
+  // Add more as needed; default will be 1.0 for unknown colleges
+};
 
-// CPM grows with log10 followers, capped to a sensible range.
-function baseCPM(followers: number): number {
-  const log = Math.log10(Math.max(1, followers));
-  const cpm = 8 + 6 * log;   // 1k ~ $14, 10k ~ $20, 100k ~ $26, 1M ~ $32
-  return Math.min(36, Math.max(8, cpm));
-}
+// Sport multipliers: Football and Basketball dominate NIL earnings
+const sportMultipliers: Record<string, number> = {
+  'Football': 3.0,
+  'Basketball': 2.0,
+  'Baseball': 1.2,
+  'Volleyball': 1.0,
+  'Swimming': 0.5,
+  // Default for other sports
+};
 
-// Monthly sponsored post capacity by size (per platform).
-function monthlySlots(followers: number): number {
-  if (followers < 10_000) return 2;
-  if (followers < 100_000) return 3;
-  if (followers < 1_000_000) return 4;
-  return 5;
-}
+// Athlete type multipliers: Youth lower, College standard, Pro higher
+const athleteMultipliers: Record<AtheleteType, number> = {
+  [AtheleteType.YOUTH]: 0.5,
+  [AtheleteType.COLLEGE]: 1.0,
+  [AtheleteType.PRO]: 1.5,
+};
 
-// Projection horizon by athlete type (years).
-function horizonYears(type: AtheleteType | null): number {
-  if (!type) return 3;
-  switch (type) {
-    case AtheleteType.YOUTH: return 2;
-    case AtheleteType.COLLEGE: return 4;
-    case AtheleteType.PRO: return 6;
-  }
-}
+// Platform multipliers: Based on influence for NIL (e.g., TikTok viral, Instagram strong for sponsorships)
+const platformMultipliers: Record<string, number> = {
+  'Instagram': 1.5,
+  'TikTok': 2.0,
+  'X': 1.0, // Formerly Twitter
+  'YouTube': 1.8,
+  'Facebook': 0.8,
+  // Default for others
+};
 
-// Round to nearest $10 for cleaner UI.
-function round10(n: number): number {
-  return Math.round(n / 10) * 10;
-}
+export async function calculateNILValue(input: CalculatorInput): Promise<{
+  calculationResults: CalculatorOutput;
+  databaseResults: Awaited<ReturnType<typeof logCalculation>>;
+}> {
+  const { athleteType, selectedColleges, selectedPlatforms, sportPlayed } = input;
 
-function clampNonNeg(n: number): number {
-  return Math.max(0, n);
-}
+  const athleteMult = athleteMultipliers[athleteType];
+  const sportMult = sportMultipliers[sportPlayed.name] || 1.0; // Default to 1.0 if sport not in map
 
-function lookupPlatformWeight(p: string): number {
-  const key = p.toLowerCase();
-  return PLATFORM_WEIGHTS[key] ?? 0.8;
-}
+  const results: CalculatorOutput = [];
 
-function lookupSportMultiplier(sport: SportType | null): number {
-  if (!sport || !sport.name) return 1.0;
-  return SPORT_MULTIPLIER[sport.name.toLowerCase()] ?? 1.0;
-}
+  for (const college of selectedColleges) {
+    const collegeMult = collegeMultipliers[college] || 1.0; // Default to 1.0 if college not in map
 
-function lookupPositionMultiplier(sport: SportType | null): number {
-  if (!sport?.positions?.length) return 1.0;
-  // Take the max nudge among provided positions.
-  let m = 1.0;
-  for (const pos of sport.positions) {
-    const v = POSITION_MULTIPLIER[pos.toLowerCase()] ?? 1.0;
-    if (v > m) m = v;
-  }
-  return m;
-}
+    // Compute projected platform values (earnings per image/video post, adjusted by multipliers)
+    const platformValues = selectedPlatforms.map((plat: any) => {
+      const platMult = platformMultipliers[plat.name] || 1.0;
+      const followers = plat.followers;
 
-function computePostValueUSD(
-  followers: number,
-  platformValue: string,
-  type: AtheleteType | null,
-  sport: SportType | null
-): { image: number; video: number } {
-  if (followers <= 0) return { image: 0, video: 0 };
+      // Base earnings per post (approximate influencer rates: $0.001 to $0.005 per follower for image, higher for video)
+      const baseImageLow = followers * 0.001;
+      const baseImageHigh = followers * 0.005;
+      const baseVideoLow = followers * 0.002;
+      const baseVideoHigh = followers * 0.01;
 
-  const er = engagementRate(followers);
-  const cpm = baseCPM(followers);
-  const platformW = lookupPlatformWeight(platformValue);
-  const athleteW = type ? ATHLETE_MULTIPLIER[type] : 1.0;
-  const sportW = lookupSportMultiplier(sport);
-  const positionW = lookupPositionMultiplier(sport);
+      // Adjust by multipliers (athlete type, sport, college, platform)
+      const imageLow = baseImageLow * athleteMult * sportMult * collegeMult * platMult;
+      const imageHigh = baseImageHigh * athleteMult * sportMult * collegeMult * platMult;
+      const videoLow = baseVideoLow * athleteMult * sportMult * collegeMult * platMult;
+      const videoHigh = baseVideoHigh * athleteMult * sportMult * collegeMult * platMult;
 
-  const base = followers * er * cpm / 1000; // USD
-  const core = base * platformW * athleteW * sportW * positionW;
+      return {
+        name: plat.name,
+        values: {
+          image: { low: Math.round(imageLow), high: Math.round(imageHigh) },
+          video: { low: Math.round(videoLow), high: Math.round(videoHigh) },
+        },
+      };
+    });
 
-  const image = core;            // image as baseline
-  const video = core * 1.25;     // video premium (richer format)
+    // Compute overall (sum of all platforms' projected values)
+    let overallImageLow = 0;
+    let overallImageHigh = 0;
+    let overallVideoLow = 0;
+    let overallVideoHigh = 0;
 
-  return { image, video };
-}
+    platformValues.forEach((pv) => {
+      overallImageLow += pv.values.image.low;
+      overallImageHigh += pv.values.image.high;
+      overallVideoLow += pv.values.video.low;
+      overallVideoHigh += pv.values.video.high;
+    });
 
-function toRange(estimate: number): MoneyRange {
-  const low = round10(clampNonNeg(estimate * 0.8));
-  const high = round10(clampNonNeg(estimate * 1.8));
-  return { low, high };
-}
-
-
-
-export function calculatePlayerValue(
-  athleteType: AtheleteType | null,
-  selectedColleges: string[],
-  selectedPlatforms: SelectedPlatform[],
-  sportPlayed: SportType | null
-): PlayerValueResult {
-  // Precompute per-platform post values + monthly slot counts.
-  const perPlatform = selectedPlatforms.map((p) => {
-    const est = computePostValueUSD(p.followers, p.name, athleteType, sportPlayed);
-    const rngImage = toRange(est.image);
-    const rngVideo = toRange(est.video);
-    return {
-      name: p.name,
-      followers: p.followers,
-      values: { image: rngImage, video: rngVideo },
-      // For NIL projection:
-      pointEstimateImage: est.image,
-      pointEstimateVideo: est.video,
-      slotsPerMonth: monthlySlots(p.followers),
+    const overall: MediumEstimation = {
+      image: { low: overallImageLow, high: overallImageHigh },
+      video: { low: overallVideoLow, high: overallVideoHigh },
     };
-  });
 
-  // Overall (sum across platforms).
-  const overallPointImage = perPlatform.reduce((s, x) => s + x.pointEstimateImage, 0);
-  const overallPointVideo = perPlatform.reduce((s, x) => s + x.pointEstimateVideo, 0);
-  const overallRange: PostValueByMedium = {
-    image: toRange(overallPointImage),
-    video: toRange(overallPointVideo),
-  };
+    // Compute NIL Career Value (NCV): Projected career earnings
+    // Assume career length factor (Youth: 2 years, College: 4 years, Pro: 10 years)
+    // Base on average annual earnings from media (avg of image/video ranges) * years
+    const careerLength = athleteType === AtheleteType.YOUTH ? 2 : athleteType === AtheleteType.COLLEGE ? 4 : 10;
+    const avgAnnualLow = (overallImageLow + overallVideoLow) / 2;
+    const avgAnnualHigh = (overallImageHigh + overallVideoHigh) / 2;
+    const ncvLow = Math.round(avgAnnualLow * careerLength * 10); // Scaled up for realism (NIL averages ~$21k/year for college)
+    const ncvHigh = Math.round(avgAnnualHigh * careerLength * 10); // Adjust scale to match average NIL data (~$21k avg, but ranges vary)
 
-  // NIL Career Value (multi-year projection; low/high mirror post-value ranges).
-  // Blend image/video 50/50 and multiply by monthly slots across platforms.
-  const blendedPointPerPost =
-    (overallPointImage + overallPointVideo) / 2;
+    const ncv: ValueEstimation = { low: ncvLow, high: ncvHigh };
 
-  const totalMonthlySlots = perPlatform.reduce((s, x) => s + x.slotsPerMonth, 0);
-  const years = horizonYears(athleteType);
+    results.push({
+      name: college,
+      ncv,
+      overall,
+      platforms: platformValues,
+    });
+  }
 
-  const annualPoint = blendedPointPerPost * totalMonthlySlots * 12;
-  const ncv: MoneyRange = {
-    low: round10(clampNonNeg(annualPoint * years * 0.8)),
-    high: round10(clampNonNeg(annualPoint * years * 1.8)),
-  };
-
-  // Build per-college blocks (same estimates but repeated per chosen college).
-  const colleges: CollegeEstimate[] = selectedColleges.map((college) => {
-    const platformSpecific: PlatformBlock[] = perPlatform.map((x) => ({
-      name: x.name,
-      values: x.values,
-    }));
-    return {
-      college,
-      overall: overallRange,
-      nilCareerValue: ncv,
-      platformSpecific,
-    };
-  });
+  // Log the calculation to the database
+  const databaseResults = await logCalculation(input, results);
 
   return {
-    athleteType,
-    sport: sportPlayed,
-    colleges,
+    calculationResults: results,
+    databaseResults,
   };
 }

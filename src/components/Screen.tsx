@@ -2,6 +2,7 @@
 'use client';
 
 import { PropsWithChildren, useEffect, useState } from 'react';
+import Stepper from './ui/stepper';
 
 type Props = PropsWithChildren<{
   title?: string;
@@ -21,31 +22,16 @@ export default function AestheticScreen({
   useEffect(() => setMounted(true), []);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-blue-900">
-        <div
-          className="absolute inset-0 opacity-5 pointer-events-none"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(59,130,246,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59,130,246,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }}
-        />
-
-        {/* Radial gradient spotlight */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-40 pointer-events-none" />
-      </div>
-
-      {/* Main content */}
+    <div className="relative w-full h-screen overflow-hidden bg-black text-white no-scrollbar">
       <div className="relative z-10 w-full h-full flex flex-col items-center px-4 overflow-hidden">
+        <h1 className='absolute top-5 left-5 font-bold text-3xl'>Sponsorship Valuation Calculator</h1>
+        <Stepper className='absolute top-5 right-5'/>
         {(title || subtitle || headerSlot) && (
           <div className={`w-full ${maxWidth} mx-auto mt-16 mb-10`}>
             <div className={`transition-all duration-1000 text-center ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               {title && (
                 <>
-                  <h1 className="font-bold text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-200">
+                  <h1 className="font-bold text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-blue-200">
                     {title}
                   </h1>
                   <div className="h-1 w-32 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full animate-glow" />

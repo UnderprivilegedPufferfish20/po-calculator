@@ -5,7 +5,7 @@ import { fmt } from "@/lib/utils";
 function RangeBar({ low, high }: { low: number; high: number }) {
   return (
     <div className="w-full space-y-3">
-      <div className="flex items-center justify-between text-sm font-medium text-slate-600">
+      <div className="flex items-center justify-between text-sm font-medium text-white">
         <div className="flex flex-col items-start">
           <span className="font-bold text-xl">{fmt(low)}</span>
           <span className="text-xs text-slate-500">Lowball</span>

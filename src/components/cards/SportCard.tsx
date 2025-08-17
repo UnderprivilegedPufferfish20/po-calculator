@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useCalculatorProvider } from "../providers/CalculatorProvider"
-import { Stage } from "@/lib/types"
+import { Stage } from "@/lib/types/athlete"
 
 type Props = {
   name: string

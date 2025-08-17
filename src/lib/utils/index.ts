@@ -42,3 +42,23 @@ export function titleCase(s: string) {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
 }
+
+
+export function parseFollowers(input: string): number {
+  if (!input) return 0;
+  
+  // Remove commas and trim whitespace
+  const cleaned = input.replace(/,/g, '').trim().toLowerCase();
+  
+  // Match number and optional suffix (k or m)
+  const match = cleaned.match(/^([\d.]+)([km]?)$/);
+  if (!match) return NaN;
+  
+  const num = parseFloat(match[1]);
+  if (isNaN(num)) return NaN;
+  
+  const suffix = match[2];
+  if (suffix === 'k') return num * 1000;
+  if (suffix === 'm') return num * 1000000;
+  return num; // No suffix, return as-is
+}

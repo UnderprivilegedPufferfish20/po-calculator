@@ -8,6 +8,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id String @id @default(uuid())
+// ---------- Leaf "Input" tables ----------
+model AthleteTypeInput {
+  id              String             @id @default(uuid())
+  input_id        String             @unique
+  athlete_type    String
+
+  // Back-relation to CalculationInput (one AthleteTypeInput can be used by many CalculationInputs)
+  calculationInput CalculationInput @relation(fields: [input_id], references: [id])
+}
+
+model CollegeInput {
+  id              String             @id @default(uuid())
+  input_id        String             
+  college         String
+  conference      String
+
+  calculationInput CalculationInput @relation(fields: [input_id], references: [id])
+}
+
+model SportInput {
+  id              String             @id @default(uuid())
+  input_id        String             @unique
+  sport           String
+  position        String?
+
+  calculationInput CalculationInput? @relation(fields: [input_id], references: [id])
+}
+
+model SocialMediaInput {
+  id              String             @id @default(uuid())
+  input_id        String             
+  platform        String
+  followers       Int
+
+  calculationInput CalculationInput @relation(fields: [input_id], references: [id])
+}
+
+// ---------- Central CalculationInput ----------
+model CalculationInput {
+  id                    String    @id @default(uuid())
+
+  // FKs for 1-1 relations
+  output_id             String @unique
+  athlete_type_input_id String @unique
+  sport_input_id        String @unique
+
+  // 1-1 relations with @unique and optional opposite relations
+  output                CalculationOutput @relation(fields: [output_id], references: [id])
+  athleteTypeInput      AthleteTypeInput? @relation()
+  sportInput            SportInput?       @relation()
+  
+  // 1-to-many relations
+  college_input      CollegeInput[]     
+  social_media_input SocialMediaInput[]
+
+  @@index([sport_input_id])
+  @@index([athlete_type_input_id])
+  @@index([output_id])
+}
+
+// ---------- Output & per-platform specifics ----------
+model CalculationOutput {
+  id                   String                        @id @default(uuid())
+  college_name         String
+
+  img_low              Int
+  img_high             Int
+  vid_low              Int
+  vid_high             Int
+  ncv_low              Int
+  ncv_high             Int
+
+  // 1-to-many to platform specifics
+  sm_platform_specific SocialMediaPlatformSpecific[]
+
+  // Optional back-relation to CalculationInput (1-1)
+  calculationInput    CalculationInput?
+}
+
+model SocialMediaPlatformSpecific {
+  id        String              @id @default(uuid())
+  output_id String
+  name      String
+  img_low   Int
+  img_high  Int
+  vid_low   Int
+  vid_high  Int
+
+  // Belongs to a single CalculationOutput
+  output    CalculationOutput   @relation(fields: [output_id], references: [id], onDelete: Cascade)
+
+  @@index([output_id])
 }

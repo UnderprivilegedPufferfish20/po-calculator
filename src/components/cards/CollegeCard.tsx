@@ -9,7 +9,7 @@ interface Props {
 }
 
 const CollegeCard = ({ name, conference }: Props) => {
-  const {selectedColleges, handleCollegeSelect, athleteType} = useCalculatorProvider()
+  const {selectedColleges, handleCollegeSelect} = useCalculatorProvider()
 
   return (
     <div 

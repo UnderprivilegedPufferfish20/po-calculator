@@ -1,9 +1,9 @@
 'use client'
 
 
-import { AtheleteType, SportType, Stage } from "@/lib/types";
+import { AtheleteType, SportType, Stage } from "@/lib/types/athlete";
 import { SelectedPlatform } from "@/lib/types/social_media";
-import React, { Dispatch, SetStateAction, useState,createContext } from "react";
+import React, { Dispatch, SetStateAction, useState, createContext } from "react";
 
 type CalculatorProviderContextType = {
   stage: Stage
