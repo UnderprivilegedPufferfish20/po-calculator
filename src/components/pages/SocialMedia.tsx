@@ -16,14 +16,15 @@ import Image from 'next/image'
 
 
 const SocialMediaPage = () => {
-  const {selectedPlatforms, setSelectedPlatforms, setStage} = useCalculatorProvider()
+  const { selectedPlatforms, setSelectedPlatforms, setStage } = useCalculatorProvider()
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
-  const DEFAULT_FOLLOWERS = 50 as const;
-  const MAX_SLIDER_VALUE = 100 as const;
-  const MAX_FOLLOWER_COUNT = 10_000_000 as const;
+  const DEFAULT_FOLLOWERS = 100_000;   // Default 100k followers
+  const MIN_FOLLOWERS = 1_000;         // Min 1k
+  const MAX_FOLLOWERS = 1_000_000;     // Max 1M
 
+  // 👉 Add new platform with raw 100k followers stored
   const addPlatform = (platformValue: string): void => {
     const platform = socialMediaPlatforms.find((p): p is SocialMediaPlatform => p.name === platformValue);
     if (platform && !selectedPlatforms.find((p): boolean => p.name === platformValue)) {
@@ -38,32 +39,25 @@ const SocialMediaPage = () => {
     setSelectedPlatforms(prev => prev.filter((p): boolean => p.name !== platformValue));
   };
 
+  // 👉 Store raw follower count directly, don’t scale it
   const updateFollowers = (platformValue: string, followers: number[]): void => {
     const followerCount = followers[0];
     if (typeof followerCount === 'number') {
-      setSelectedPlatforms(prev => prev.map((p): SelectedPlatform => 
+      setSelectedPlatforms(prev => prev.map((p): SelectedPlatform =>
         p.name === platformValue ? { ...p, followers: followerCount } : p
       ));
     }
   };
 
+  // 👉 Format just for display
   const formatFollowers = (count: number): string => {
-    if (count >= 1_000_000) {
-      return `${(count / 1_000_000).toFixed(1)}M`;
-    } else if (count >= 1_000) {
-      return `${(count / 1_000).toFixed(1)}K`;
-    }
-    return count.toString();
-  };
-
-  const getFollowerCount = (sliderValue: number): number => {
-    // Scale slider value (0-100) to follower count (0-10M)
-    return Math.round((sliderValue / MAX_SLIDER_VALUE) * MAX_FOLLOWER_COUNT);
+    if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
+    return `${(count / 1_000).toFixed(0)}K`;
   };
 
   const getTotalReach = (): number => {
-    return selectedPlatforms.reduce((total: number, platform: SelectedPlatform): number => 
-      total + getFollowerCount(platform.followers), 0
+    return selectedPlatforms.reduce((total: number, platform: SelectedPlatform): number =>
+      total + platform.followers, 0
     );
   };
 
@@ -117,11 +111,12 @@ const SocialMediaPage = () => {
                             isPlatformSelected(platform.name) ? "opacity-100" : "opacity-0"
                           }`}
                         />
-                        <Image 
+                        <Image
                           src={`/sm_platforms/${platform.name}.png`}
                           width={24}
                           height={24}
                           alt={platform.name}
+                          className={platform.name === 'x' ? 'invert' : ''}
                         />
                         {platform.name}
                       </CommandItem>
@@ -151,7 +146,7 @@ const SocialMediaPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {selectedPlatforms.map((platform: SelectedPlatform) => {
-            const followersDisplay = formatFollowers(getFollowerCount(platform.followers));
+            const followersDisplay = formatFollowers(platform.followers);
             return (
               <div
                 key={platform.name}
@@ -169,6 +164,7 @@ const SocialMediaPage = () => {
                         width={24}
                         height={24}
                         alt={platform.name}
+                        className={platform.name === 'x' ? 'invert' : ''}
                       />
                       <div>
                         <div className="text-lg font-semibold">{platform.name}</div>
@@ -196,14 +192,15 @@ const SocialMediaPage = () => {
                     <Slider
                       value={[platform.followers]}
                       onValueChange={(value: number[]) => updateFollowers(platform.name, value)}
-                      max={10}
-                      step={0.005}
+                      min={MIN_FOLLOWERS}
+                      max={MAX_FOLLOWERS}
+                      step={1_000}
                       className="w-full"
                     />
 
                     <div className="mt-2 flex justify-between text-[10px] text-gray-500">
-                      <span>0</span>
-                      <span>1M+</span>
+                      <span>1K</span>
+                      <span>1M</span>
                     </div>
                   </div>
                 </div>
@@ -227,6 +224,5 @@ const SocialMediaPage = () => {
     </AestheticScreen>
   );
 }
-
 
 export default SocialMediaPage
