@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useCalculatorProvider } from "../providers/CalculatorProvider"
-import { Stage } from "@/lib/types/athlete"
 
 type Props = {
   name: string
@@ -29,7 +28,7 @@ export function SportCard(sport: Props) {
             setSportPlayed({
               name: sport.name
             });
-            setStage(Stage.SOCIAL_MEDIA_SELECT)
+            setStage("SMS")
           }
         }
       >
@@ -76,7 +75,7 @@ export function SportCard(sport: Props) {
                     name: sport.name,
                     positions: [position]
                   });
-                  setStage(Stage.SOCIAL_MEDIA_SELECT)
+                  setStage("SMS")
                 }}
               >
                 {position}

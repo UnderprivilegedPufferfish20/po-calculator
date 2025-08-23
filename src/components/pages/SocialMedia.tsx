@@ -9,7 +9,6 @@ import { Slider } from '../ui/slider';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
-import { Stage } from '@/lib/types/athlete';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
 import { titleCase } from '@/lib/utils';
 import Image from 'next/image'
@@ -214,7 +213,7 @@ const SocialMediaPage = () => {
       {selectedPlatforms.length > 0 && (
         <div className="sticky bottom-[-2rem] flex justify-center">
             <Button
-              onClick={() => setStage(Stage.COLLEGE_SELECT)}
+              onClick={() => setStage("CS")}
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 font-semibold rounded-lg"
             >
               Continue to College Selection

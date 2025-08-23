@@ -1,12 +1,12 @@
 'use client'
 
-import { AtheleteType, Stage } from "@/lib/types/athlete";
+import { AthleteType } from "@/lib/types/athlete";
 import { useState } from "react";
 import { useCalculatorProvider } from "../providers/CalculatorProvider";
 
 interface Props {
   desc: string,
-  label: AtheleteType,
+  label: AthleteType,
   height?: string,
 }
 
@@ -18,7 +18,7 @@ const AthleteTypeCard = (props: Props) => {
     <div
       onClick={() => {
         setAthleteType(props.label);
-        setStage(Stage.SPORT_SELECT)
+        setStage("SS")
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

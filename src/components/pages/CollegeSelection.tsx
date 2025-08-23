@@ -5,7 +5,6 @@ import AestheticScreen from '../Screen';
 import { Button } from '../ui/button';
 import { College, ConferenceType } from '@/lib/types/college';
 import { colleges, conferences } from '@/lib/constants/colleges';
-import { AtheleteType, Stage } from '@/lib/types/athlete';
 import { glassCard } from '@/lib/utils';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
 import CollegeCard from '../cards/CollegeCard'; // <-- import your reusable card
@@ -14,7 +13,7 @@ import { Search } from 'lucide-react';
 const CollegeSelectionPage = () => {
   const { setStage, athleteType, selectedColleges, handleCollegeSelect } = useCalculatorProvider();
 
-  const maxColleges: number = athleteType === AtheleteType.YOUTH ? 5 : 2;
+  const maxColleges: number = athleteType === "Youth" ? 5 : 2;
   const [selectedConference, setSelectedConference] = useState<ConferenceType | 'All'>('All');
   const [collegeSearchTerm, setCollegeSearchTerm] = useState<string>('');
 
@@ -117,7 +116,7 @@ const CollegeSelectionPage = () => {
           {/* Continue button */}
           <div className="flex justify-center">
             <Button
-              onClick={() => setStage(Stage.END)}
+              onClick={() => setStage("E")}
               className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
             >
               Complete Setup

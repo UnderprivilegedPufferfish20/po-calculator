@@ -12,46 +12,46 @@ import { cn } from '@/lib/utils';
 const Stepper = ({className}: {className: string}) => {
   const {stage} = useCalculatorProvider()
 
-  const steps = [
+  const steps: { id: number, title: string, description: string, active: Stage }[] = [
     {
       id: 1,
       title: "Athlete Select",
       description: "Choose which type of athlete you are",
-      active: Stage.ATHLETE_SELECT
+      active: "AS"
     },
     {
       id: 2,
       title: "Sport Select",
       description: "Choose which sport you play, and position if applicable",
-      active: Stage.SPORT_SELECT
+      active: "SS"
     },
     {
       id: 3,
       title: "Social Media Select",
       description: "Choose which platforms you're active on, and how many followers on each",
-      active: Stage.SOCIAL_MEDIA_SELECT
+      active: "SMS"
     },
     {
       id: 4,
       title: "College Select",
       description: "Pick out 2 colleges you're interested in knowing your NIL value if you went there if you're youth, 5 if you're student",
-      active: Stage.COLLEGE_SELECT
+      active: "CS"
     },
     {
       id: 5,
       title: "Valuation Dashboard",
       description: "View you NIL career valuation for each college you picked, and see potential earning from each social media platform.",
-      active: Stage.END
+      active: "E"
     }
   ];
 
   const getStepStatus = (step: any, currentStage: any) => {
-    const stageOrder = [
-      Stage.ATHLETE_SELECT,
-      Stage.SPORT_SELECT,
-      Stage.SOCIAL_MEDIA_SELECT,
-      Stage.COLLEGE_SELECT,
-      Stage.END
+    const stageOrder: Stage[] = [
+      "AS",
+      "SS",
+      "SMS",
+      "CS",
+      "E"
     ];
     
     const currentIndex = stageOrder.indexOf(currentStage);

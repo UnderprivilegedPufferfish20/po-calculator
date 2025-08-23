@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Info, ChevronDown, ChevronUp, Loader2Icon } from 'lucide-react'
 import RangeBar from '../RangeBar'
-import { fmt, getCollegeImg } from '@/lib/utils'
+import { getCollegeImg } from '@/lib/utils'
 import { CalculatorOutput } from '@/lib/types/nil'
 import Image from 'next/image'
 import AestheticScreen from '../Screen'
