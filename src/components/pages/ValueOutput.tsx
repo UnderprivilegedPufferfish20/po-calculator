@@ -45,7 +45,7 @@ export default function NILValueDemo({ colleges }: { colleges: CalculatorOutput 
       maxWidth='max-w-full'
     >
       <TooltipProvider>
-        <div className="min-h-screen bg-transparent text-slate-200 p-4 sm:p-6 lg:p-8">
+        <div className="min-h-screen bg-transparent text-slate-200 p-4 sm:p-6 lg:p-8 transition-all duration-1000 delay-300 translate-y-8 opacity-100">
           <div className="mx-auto max-w-6xl">
             <Tabs value={String(collegeIndex)} onValueChange={(v) => setCollegeIndex(Number(v))}>
               <TabsList

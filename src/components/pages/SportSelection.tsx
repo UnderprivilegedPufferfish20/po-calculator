@@ -34,7 +34,7 @@ const SportSelectionPage = () => {
           }
         >
           {filteredSports.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 transition-all duration-1000 delay-300 translate-y-8 opacity-100">
               {filteredSports.map((sport) => (
                 <SportCard
                   key={sport.name}
@@ -44,7 +44,7 @@ const SportSelectionPage = () => {
               ))}
             </div>
           ) : (
-            <div className="flex justify-center items-center h-64 text-gray-400 text-xl">
+            <div className="flex justify-center items-center h-64 text-gray-400 text-xl transition-all duration-1000 delay-300 translate-y-8 opacity-100">
               No sports found matching "{searchTerm}"
             </div>
           )}

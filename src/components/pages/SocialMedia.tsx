@@ -143,81 +143,80 @@ const SocialMediaPage = () => {
           <p className="text-sm mt-2">Use the chips or the search to add one.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {selectedPlatforms.map((platform: SelectedPlatform) => {
-            const followersDisplay = formatFollowers(platform.followers);
-            return (
-              <div
-                key={platform.name}
-                className="rounded-xl border border-gray-700/60 bg-gray-900/60 backdrop-blur p-5 relative overflow-hidden"
-              >
-                {/* subtle glow edge */}
-                <div className="pointer-events-none absolute -inset-px rounded-xl opacity-30 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 blur-[6px]" />
+        <div className='flex flex-col gap-8 justify-center'>
 
-                <div className="relative z-10">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Image 
-                        src={`/sm_platforms/${platform.name}.png`}
-                        width={24}
-                        height={24}
-                        alt={platform.name}
-                        className={platform.name === 'x' ? 'invert' : ''}
-                      />
-                      <div>
-                        <div className="text-lg font-semibold">{platform.name}</div>
-                        <div className="text-xs text-gray-400">Drag to estimate followers</div>
+          <div className="flex justify-center">
+            <Button
+              onClick={() => setStage("CS")}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-4 text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              Complete Setup →
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {selectedPlatforms.map((platform: SelectedPlatform) => {
+              const followersDisplay = formatFollowers(platform.followers);
+              return (
+                <div
+                  key={platform.name}
+                  className="rounded-xl border border-gray-700/60 bg-gray-900/60 backdrop-blur p-5 relative overflow-hidden"
+                >
+                  {/* subtle glow edge */}
+                  <div className="pointer-events-none absolute -inset-px rounded-xl opacity-30 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 blur-[6px]" />
+
+                  <div className="relative z-10">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Image 
+                          src={`/sm_platforms/${platform.name}.png`}
+                          width={24}
+                          height={24}
+                          alt={platform.name}
+                          className={platform.name === 'x' ? 'invert' : ''}
+                        />
+                        <div>
+                          <div className="text-lg font-semibold">{platform.name}</div>
+                          <div className="text-xs text-gray-400">Drag to estimate followers</div>
+                        </div>
                       </div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removePlatform(platform.name)}
-                      className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                      aria-label={`Remove ${platform.name}`}
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-
-                  {/* Slider */}
-                  <div className="mt-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-300">Followers</span>
-                      <span className="text-xl font-bold text-purple-300">{followersDisplay}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removePlatform(platform.name)}
+                        className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                        aria-label={`Remove ${platform.name}`}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
                     </div>
 
-                    <Slider
-                      value={[platform.followers]}
-                      onValueChange={(value: number[]) => updateFollowers(platform.name, value)}
-                      min={MIN_FOLLOWERS}
-                      max={MAX_FOLLOWERS}
-                      step={1_000}
-                      className="w-full"
-                    />
+                    {/* Slider */}
+                    <div className="mt-5">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm text-gray-300">Followers</span>
+                        <span className="text-xl font-bold text-purple-300">{followersDisplay}</span>
+                      </div>
 
-                    <div className="mt-2 flex justify-between text-[10px] text-gray-500">
-                      <span>1K</span>
-                      <span>1M</span>
+                      <Slider
+                        value={[platform.followers]}
+                        onValueChange={(value: number[]) => updateFollowers(platform.name, value)}
+                        min={MIN_FOLLOWERS}
+                        max={MAX_FOLLOWERS}
+                        step={1_000}
+                        className="w-full"
+                      />
+
+                      <div className="mt-2 flex justify-between text-[10px] text-gray-500">
+                        <span>1K</span>
+                        <span>1M</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Sticky footer CTA */}
-      {selectedPlatforms.length > 0 && (
-        <div className="sticky bottom-[-2rem] flex justify-center">
-            <Button
-              onClick={() => setStage("CS")}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 font-semibold rounded-lg"
-            >
-              Continue to College Selection
-            </Button>
+              );
+            })}
+          </div>
         </div>
       )}
     </AestheticScreen>

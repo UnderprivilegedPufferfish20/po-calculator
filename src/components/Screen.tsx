@@ -24,8 +24,8 @@ export default function AestheticScreen({
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black text-white no-scrollbar">
       <div className="relative z-10 w-full h-full flex flex-col items-center px-4 overflow-hidden">
-        <h1 className='absolute top-5 left-5 font-bold text-3xl'>Sponsorship Valuation Calculator</h1>
-        <Stepper className='absolute top-5 right-5'/>
+        <h1 className='absolute top-5 left-5 font-bold xl:text-3xl lg:text-2xl md:text-xl sm:text-lg'>Sponsorship Valuation Calculator</h1>
+        <Stepper />
         {(title || subtitle || headerSlot) && (
           <div className={`w-full ${maxWidth} mx-auto mt-16 mb-10`}>
             <div className={`transition-all duration-1000 text-center ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>

@@ -7,7 +7,7 @@ import { College, ConferenceType } from '@/lib/types/college';
 import { colleges, conferences } from '@/lib/constants/colleges';
 import { glassCard } from '@/lib/utils';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
-import CollegeCard from '../cards/CollegeCard'; // <-- import your reusable card
+import CollegeCard from '../cards/CollegeCard';
 import { Search } from 'lucide-react';
 
 const CollegeSelectionPage = () => {
@@ -25,12 +25,17 @@ const CollegeSelectionPage = () => {
     return matchesConference && matchesSearch;
   });
 
+  // Get college objects for selected colleges
+  const selectedCollegeObjects: College[] = colleges.filter(college => 
+    selectedColleges.includes(college.name)
+  );
+
   return (
     <AestheticScreen
       title="Select Colleges"
-      subtitle={`Choose up to ${maxColleges} colleges you're interested in • ${selectedColleges.length} selected`}
+      subtitle={`Choose up to ${maxColleges} colleges you're interested in`}
       headerSlot={
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto transition-all duration-1000 delay-300 translate-y-8 opacity-100">
           {/* Search bar with inline conference filters */}
           <label className="block">
             <div
@@ -46,7 +51,7 @@ const CollegeSelectionPage = () => {
               />
 
               {/* Right-aligned, inline filter chips */}
-              <div className="shrink-0 flex items-center gap-2 overflow-x-auto max-w-[55%] pl-2">
+              <div className="shrink-0 flex items-center gap-2 overflow-x-auto max-w-[60%] pl-2 no-scrollbar">
                 {conferences.map((conference) => (
                   <Button
                     key={conference}
@@ -73,57 +78,124 @@ const CollegeSelectionPage = () => {
         </div>
       }
     >
-      {/* College grid */}
-      {filteredColleges.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {filteredColleges.map((college) => (
-            <CollegeCard
-              key={college.name}
-              name={college.name}
-              conference={college.conference}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex justify-center items-center h-64 text-gray-400 text-xl">
-          No colleges found matching your criteria
-        </div>
-      )}
-
-      {/* Selected colleges list */}
+      {/* Selected Colleges Grid */}
       {selectedColleges.length > 0 && (
-        <div className={`${glassCard} mt-8 p-6 sticky bottom-[-48px]`}>
-          <h3 className="text-xl font-semibold mb-4 text-center">Selected Colleges</h3>
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {selectedColleges.map((name) => (
-              <div
-                key={name}
-                className="bg-purple-900/30 border border-purple-500/60 rounded-lg px-3 py-2 flex items-center gap-2"
-              >
-                <span className="text-sm font-medium">{name}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleCollegeSelect(name)}
-                  className="text-red-400 hover:text-red-300 hover:bg-red-900/20 p-1 h-auto"
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold text-white">Your Selected Colleges</h3>
+            <div className="text-sm text-gray-300">
+              {selectedColleges.length} of {maxColleges} selected
+            </div>
+          </div>
+          
+          <div className={`${glassCard} p-4 rounded-xl mb-6`}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {selectedCollegeObjects.map((college) => (
+                <div key={college.name} className="relative">
+                  {/* consistent box */}
+                  <div className="aspect-[4/5]"> {/* or aspect-square */}
+                    <CollegeCard
+                      name={college.name}
+                      conference={college.conference}
+                    />
+                  </div>
+
+                  <Button
+                    onClick={() => handleCollegeSelect(college.name)}
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 p-0 flex items-center justify-center text-xs shadow-lg"
+                  >
+                    ✕
+                  </Button>
+                </div>
+              ))}
+
+              {Array.from({ length: Math.max(0, maxColleges - selectedColleges.length) }).map((_, i) => (
+                <div
+                  key={`empty-${i}`}
+                  className="aspect-[4/5] rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center text-gray-500 text-sm"
                 >
-                  ✕
-                </Button>
-              </div>
-            ))}
+                  Empty
+                </div>
+              ))}
+            </div>
+
           </div>
 
-          {/* Continue button */}
-          <div className="flex justify-center">
+          {/* Continue Button */}
+          <div className="flex justify-center mb-8">
             <Button
               onClick={() => setStage("E")}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-4 text-lg font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              Complete Setup
+              Complete Setup →
             </Button>
           </div>
         </div>
       )}
+
+      {/* Divider */}
+      {selectedColleges.length > 0 && (
+        <div className="relative mb-8">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-600"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-4 text-gray-400">
+              Choose from all colleges
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* All Colleges Grid */}
+      <div>
+        {selectedColleges.length === 0 && (
+          <h3 className="text-xl font-semibold text-white mb-4">Choose Your Colleges</h3>
+        )}
+        
+        {filteredColleges.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {filteredColleges.map((college) => {
+              const isSelected = selectedColleges.includes(college.name);
+              const isDisabled = !isSelected && selectedColleges.length >= maxColleges;
+              
+              return (
+                <div 
+                  key={college.name} 
+                  className={`relative ${
+                    isSelected ? 'opacity-50' : ''
+                  } ${
+                    isDisabled ? 'opacity-30 pointer-events-none' : ''
+                  }`}
+                >
+                  <CollegeCard
+                    name={college.name}
+                    conference={college.conference}
+                  />
+                  {isSelected && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+                      <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">
+                        ✓
+                      </div>
+                    </div>
+                  )}
+                  {isDisabled && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
+                      <div className="text-gray-400 text-xs text-center px-2">
+                        Max reached
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-64 text-gray-400 text-xl">
+            No colleges found matching your criteria
+          </div>
+        )}
+      </div>
     </AestheticScreen>
   );
 };
