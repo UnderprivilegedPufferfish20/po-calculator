@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Info, ChevronDown, ChevronUp, Loader2Icon } from 'lucide-react'
-import RangeBar from '../RangeBar'
+import RangeBar from '../ui/range_bar'
 import { getCollegeImg } from '@/lib/utils'
 import { CalculatorOutput } from '@/lib/types/nil'
 import Image from 'next/image'
