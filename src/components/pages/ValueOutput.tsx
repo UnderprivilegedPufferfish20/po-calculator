@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Info, ChevronDown, ChevronUp, Loader2Icon } from 'lucide-react'
 import RangeBar from '../ui/range_bar'
-import { getCollegeImg } from '@/lib/utils'
+import { getCollegeImg, getCollegeTitle } from '@/lib/utils'
 import { CalculatorOutput } from '@/lib/types/nil'
 import Image from 'next/image'
 import AestheticScreen from '../Screen'
@@ -52,7 +52,7 @@ export default function NILValueDemo({ colleges }: { colleges: CalculatorOutput 
                 className="
                   flex w-full h-full gap-2 rounded-xl
                   bg-slate-900/50 backdrop-blur supports-[backdrop-filter]:backdrop-blur
-                  border border-slate-700/60 p-2 shadow-inner shadow-black/40
+                  border border-slate-700/60 p-2 shadow-inner shadow-black/40 flex-wrap
                 "
               >
                 {colleges.map((c, i) => (
@@ -80,8 +80,7 @@ export default function NILValueDemo({ colleges }: { colleges: CalculatorOutput 
                         className='rounded-full'
                       />
                     </span>
-                    <span className="hidden sm:inline text-xs">{c.name}</span>
-                    <span className="sm:hidden text-xs">{c.name.split(' ')[0]}</span>
+                    <span className="hidden sm:inline text-xs">{getCollegeTitle(c.name)}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>

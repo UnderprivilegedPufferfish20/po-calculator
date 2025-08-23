@@ -10,7 +10,6 @@ import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
 import { useCalculatorProvider } from '../providers/CalculatorProvider';
-import { titleCase } from '@/lib/utils';
 import Image from 'next/image'
 
 
@@ -65,7 +64,7 @@ const SocialMediaPage = () => {
   };
 
   const getSelectedPlatformLabel = (): string | undefined => {
-    return titleCase(socialMediaPlatforms.find((platform): boolean => platform.name === value)?.name ?? '')
+    return socialMediaPlatforms.find((platform): boolean => platform.name === value)?.name
   };
 
   return (

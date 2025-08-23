@@ -36,13 +36,6 @@ export function getCollegeImg(name: string) {
 
 export const fmt = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n)
 
-export function titleCase(s: string) {
-    return s.toLowerCase()
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-}
-
 
 export function parseFollowers(input: string): number {
   if (!input) return 0;
@@ -61,4 +54,15 @@ export function parseFollowers(input: string): number {
   if (suffix === 'k') return num * 1000;
   if (suffix === 'm') return num * 1000000;
   return num; // No suffix, return as-is
+}
+
+
+export function getCollegeTitle(name: string) {
+  const finish: string[] = []
+
+  for (let p of getCollegeImg(name).split('/')[3].split('_')) {
+    finish.push(p[0].toUpperCase() + p.slice(1))
+  }
+
+  return finish.join(' ').split('.')[0]
 }
