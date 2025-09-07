@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { AthleteType } from "@/lib/types/athlete";
 import { CalculatorInputSchema, CalculatorOutput, MediumEstimation, ValueEstimation } from '@/lib/types/nil'
 import logCalculation from "@/lib/actions/calculations";
-import { athleteMultipliers, sportMultipliers, collegeMultipliers, platformMultipliers } from "@/lib/constants/multipliers";
+import { athleteMultipliers, sportMultipliers, stateMultipliers, platformMultipliers } from "@/lib/constants/multipliers";
 import { ZodError } from "zod";
+import { colleges } from "@/lib/constants/colleges";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
     const results: CalculatorOutput = [];
   
     for (const college of selectedColleges) {
-      const collegeMult = collegeMultipliers[college] || 1.0; // Default to 1.0 if college not in map
+      const stateMult = stateMultipliers[colleges.find(c => c.name === college)!.state] || 1.0; // Default to 1.0 if college not in map
   
       // Compute projected platform values (earnings per image/video post, adjusted by multipliers)
       const platformValues = selectedPlatforms.map((plat: any) => {
@@ -33,10 +34,10 @@ export async function POST(req: NextRequest) {
         const baseVideoHigh = followers * 0.01;
   
         // Adjust by multipliers (athlete type, sport, college, platform)
-        const imageLow = baseImageLow * athleteMult * sportMult * collegeMult * platMult;
-        const imageHigh = baseImageHigh * athleteMult * sportMult * collegeMult * platMult;
-        const videoLow = baseVideoLow * athleteMult * sportMult * collegeMult * platMult;
-        const videoHigh = baseVideoHigh * athleteMult * sportMult * collegeMult * platMult;
+        const imageLow = baseImageLow * athleteMult * sportMult * stateMult * platMult;
+        const imageHigh = baseImageHigh * athleteMult * sportMult * stateMult * platMult;
+        const videoLow = baseVideoLow * athleteMult * sportMult * stateMult * platMult;
+        const videoHigh = baseVideoHigh * athleteMult * sportMult * stateMult * platMult;
   
         return {
           name: plat.name,
